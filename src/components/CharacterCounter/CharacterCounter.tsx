@@ -33,13 +33,42 @@ const CharacterCounter: React.FC<CharacterCounterProps> = ({
 
   const stats = calculateStats(text);
 
+const getWordCountColorClass = () => {
+    if (stats.wordCount < minWords) return "text-red";
+    if (stats.wordCount > maxWords) return "text-orange";
+    return "text-green";
+  };
+
+  const progress = Math.min((stats.wordCount / maxWords) * 100, 100);
+
   return (
-    <div style={{ maxWidth: "600px", margin: "0 auto" }}>
+    <div className="character-counter-container">
       <TextInput onTextChange={setText} placeholder="Start typing..." />
 
-      {/* Stats display */}
-      <StatsDisplay stats={stats} showReadingTime={true} />
+      <StatsDisplay stats={stats} showReadingTime />
 
+      {/* Progress section */}
+      <div>
+        <p className={getWordCountColorClass()}>
+          Word Count: {stats.wordCount} / {maxWords}
+        </p>
+
+        <div className="progress-bar-background">
+          <div
+            className="progress-bar-fill"
+            style={{
+              width: `${progress}%`,
+              backgroundColor:
+                stats.wordCount < minWords
+                  ? "red"
+                  : stats.wordCount > maxWords
+                  ? "orange"
+                  : "green",
+            }}
+          />
+        </div>
+      </div>
+      
       {/* Optional word limits */}
       {minWords > 0 && <p>Minimum words: {minWords}</p>}
       {maxWords !== Infinity && <p>Maximum words: {maxWords}</p>}
