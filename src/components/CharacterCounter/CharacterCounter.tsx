@@ -11,7 +11,15 @@ const CharacterCounter: React.FC<CharacterCounterProps> = ({
   const [text, setText] = useState("");
 
   const calculateStats = (input: string): TextStats => {
-    const words = input.trim().split(/\s+/).filter(Boolean);
+    if (!input.trim()) {
+      return {
+        characterCount: 0,
+        wordCount: 0,
+        readingTime: 0,
+      };
+    }
+
+    const words = input.trim().split(/\s+/);
     const wordCount = words.length;
 
     const readingTime = wordCount / 200;
